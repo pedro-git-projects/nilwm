@@ -89,9 +89,8 @@ drw_free(Drw *drw)
  * drw_fontset_create instead.
  */
 static Fnt *
-xfont_create(Drw *drw, const char *fontname, FcPattern *fontpattern)
+xfont_create(const Drw *drw, const char *fontname, FcPattern *fontpattern)
 {
-	Fnt *font;
 	XftFont *xfont = NULL;
 	FcPattern *pattern = NULL;
 
@@ -119,7 +118,7 @@ xfont_create(Drw *drw, const char *fontname, FcPattern *fontpattern)
 		die("no font specified.");
 	}
 
-	font = ecalloc(1, sizeof(Fnt));
+	Fnt *font = ecalloc(1, sizeof(Fnt));
 	font->xfont = xfont;
 	font->pattern = pattern;
 	font->h = xfont->ascent + xfont->descent;
@@ -143,12 +142,11 @@ Fnt*
 drw_fontset_create(Drw* drw, const char *fonts[], size_t fontcount)
 {
 	Fnt *cur, *ret = NULL;
-	size_t i;
 
 	if (!drw || !fonts)
 		return NULL;
 
-	for (i = 1; i <= fontcount; i++) {
+	for (size_t i = 1; i <= fontcount; i++) {
 		if ((cur = xfont_create(drw, fonts[fontcount - i], NULL))) {
 			cur->next = ret;
 			ret = cur;
@@ -183,14 +181,13 @@ drw_clr_create(Drw *drw, Clr *dest, const char *clrname)
 Clr *
 drw_scm_create(Drw *drw, const char *clrnames[], size_t clrcount)
 {
-	size_t i;
 	Clr *ret;
 
 	/* need at least two colors for a scheme */
 	if (!drw || !clrnames || clrcount < 2 || !(ret = ecalloc(clrcount, sizeof(XftColor))))
 		return NULL;
 
-	for (i = 0; i < clrcount; i++)
+	for (size_t i = 0; i < clrcount; i++)
 		drw_clr_create(drw, &ret[i], clrnames[i]);
 	return ret;
 }
@@ -227,7 +224,7 @@ drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lp
 	int ty, ellipsis_x = 0;
 	unsigned int tmpw, ew, ellipsis_w = 0, ellipsis_len, hash, h0, h1;
 	XftDraw *d = NULL;
-	Fnt *usedfont, *curfont, *nextfont;
+	Fnt *curfont, *nextfont;
 	int utf8strlen, utf8charlen, utf8err, render = x || y || w || h;
 	long utf8codepoint = 0;
 	const char *utf8str;
@@ -257,7 +254,7 @@ drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lp
 		w -= lpad;
 	}
 
-	usedfont = drw->fonts;
+	Fnt *usedfont = drw->fonts;
 	if (!ellipsis_width && render)
 		ellipsis_width = drw_fontset_getwidth(drw, "...");
 	if (!invalid_width && render)
@@ -329,7 +326,7 @@ drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lp
 			charexists = 0;
 			usedfont = nextfont;
 		} else {
-			/* Regardless of whether or not a fallback font is found, the
+			/* Whether or not a fallback font is found, the
 			 * character must be drawn. */
 			charexists = 1;
 
@@ -438,7 +435,7 @@ drw_cur_create(Drw *drw, int shape)
 }
 
 void
-drw_cur_free(Drw *drw, Cur *cursor)
+drw_cur_free(const Drw *drw, Cur *cursor)
 {
 	if (!cursor)
 		return;
