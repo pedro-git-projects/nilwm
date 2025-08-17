@@ -1,15 +1,12 @@
-/* See LICENSE file for copyright and license details. */
-
 /* appearance */
-static const unsigned int borderpx = 3; /* border pixel of windows */
+static const unsigned int borderpx = 1; /* border pixel of windows */
 static const unsigned int snap = 32; /* snap pixel */
 
-
 /* vanitygaps: currently turned-off */
-static const unsigned int gappih = 0; /* horiz inner gap between windows */
-static const unsigned int gappiv = 0; /* vert inner gap between windows */
-static const unsigned int gappoh = 0; /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov = 0; /* vert outer gap between windows and screen edge */
+static const unsigned int gappih = 10; /* horiz inner gap between windows */
+static const unsigned int gappiv = 10; /* vert inner gap between windows */
+static const unsigned int gappoh = 20; /* horiz outer gap between windows and screen edge */
+static const unsigned int gappov = 20; /* vert outer gap between windows and screen edge */
 static const int smartgaps = 0; /* 1 means no outer gap when there is only one window */
 
 /* systray */
@@ -22,6 +19,7 @@ static const int systraypinningfailfirst = 1;
 static const int showsystray = 1; /* 0 means no systray */
 static const int showbar = 1; /* 0 means no bar */
 static const int topbar = 1; /* 0 means bottom bar */
+static const int viewontag = 1; /* 0 means bottom bar */
 
 static const char *fonts[] = {
     "Noto Sans Mono:size=12:antialias=true:autohint=true",
@@ -30,11 +28,13 @@ static const char *fonts[] = {
 
 static const char dmenufont[] = "Noto Sans Mono:size=12:antialias=true:autohint=true";
 
-static const char col_gray1[] = "#222222";
-static const char col_gray2[] = "#444444";
-static const char col_gray3[] = "#bbbbbb";
-static const char col_gray4[] = "#eeeeee";
-static const char col_cyan[] = "#005577";
+static const char col_gray1[] = "#282828"; // bar bg
+static const char col_gray2[] = "#282828"; // unselected border
+static const char col_gray3[] = "#ebdbb2"; // unselected workspaces && slstatus
+static const char col_gray4[] = "#1d2021"; // selected workspace && title text
+static const char col_gray5[] = "#a9b665"; // border
+static const char col_cyan[] = "#BB7548";  // highlighted workspace, boarder
+
 static const char *colors[][3] = {
     /*               fg         bg         border   */
     [SchemeNorm] = {col_gray3, col_gray1, col_gray2},
@@ -62,14 +62,14 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 
 static const Layout layouts[] = {
     /* symbol     arrange function */
-    {"瓦", tile}, /* first entry is default */
-    {"漂う", NULL}, /* no layout function means floating behavior */
-    {"一", monocle},
+    {"[]=", tile}, /* first entry is default */
+    {"><>", NULL}, /* no layout function means floating behavior */
+    {"[M]", monocle},
     {NULL, NULL},
 };
 
 /* key definitions */
-#define MODKEY Mod1Mask
+#define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
