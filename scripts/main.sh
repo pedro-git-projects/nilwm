@@ -26,4 +26,3 @@ start_daemons
 set_wallpapers "${WALLPAPERS[@]}"
 
 log_info "dwm startup: done"
-trap - TERM INT EXIT
