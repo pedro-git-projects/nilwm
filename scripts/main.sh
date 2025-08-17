@@ -2,9 +2,6 @@
 set -Eeuo pipefail
 IFS=$'\n\t'
 
-# ensure to kill the whole process group on exit (so dwm autostart cleanup works)
-trap 'trap - EXIT; kill -- -$$ 2>/dev/null || true' TERM INT EXIT
-
 SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 
 # shellcheck source=./config.sh
@@ -21,8 +18,8 @@ source "$SCRIPT_DIR/lib/x11.sh"
 source "$SCRIPT_DIR/modules/monitors.sh"
 # shellcheck source=./modules/compositor.sh
 source "$SCRIPT_DIR/modules/compositor.sh"
-# shellcheck source=./modules/wallpapers.sh
-source "$SCRIPT_DIR/modules/wallpapers.sh"
+# shellcheck source=./modules/wallpaper.sh
+source "$SCRIPT_DIR/modules/wallpaper.sh"
 # shellcheck source=./modules/services.sh
 source "$SCRIPT_DIR/modules/services.sh"
 
