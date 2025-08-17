@@ -67,7 +67,7 @@ make clean install
 
 ## Arch Auto Setup
 
-I provide an additional tool — [`arch-auto-setup`](https://github.com/pedro-git-projects/arch-auto-setup) — that automates much of the post-install environment setup for Arch Linux.
+I provide an additional tool [`arch-auto-setup`](https://github.com/pedro-git-projects/arch-auto-setup) — that automates much of the post-install environment setup for Arch Linux.
 
 ### Highlights:
 
@@ -85,3 +85,7 @@ cd arch-auto-setup
 go build .
 ./arch-auto-setup pkg
 ```
+
+## TODO
+
+Update [`arch-auto-setup`](https://github.com/pedro-git-projects/arch-auto-setup) to use this repo instead of [`arch-dot-files`](https://github.com/pedro-git-projects/arch-dotfiles) 
