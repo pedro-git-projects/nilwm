@@ -40,5 +40,5 @@ DAEMON_APPS=(
 
 PICOM_CONF="$HOME/.dwm/picom.conf"
 
-# host/user overrides without touching repo
-[[ -f "$HOME/.dwm/startup/.env.local" ]] && source "$HOME/.dwm/startup/.env.local"
+
+[[ -f "$HOME/.dwm/startup/.env.local" ]] && source "$HOME/.dwm/startup/.env.local" || true
