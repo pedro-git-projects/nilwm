@@ -1222,6 +1222,18 @@ maprequest(XEvent *e)
 	static XWindowAttributes wa;
 	XMapRequestEvent *ev = &e->xmaprequest;
 
+	/* systray: handle tray icons early and bail */
+	{
+		Client *i;
+		if ((i = wintosystrayicon(ev->window))) {
+			sendevent(i->win, netatom[Xembed], StructureNotifyMask, CurrentTime,
+					  XEMBED_WINDOW_ACTIVATE, 0, systray->win, XEMBED_EMBEDDED_VERSION);
+			resizebarwin(selmon);
+			updatesystray();
+			return;
+		}
+	}
+
 	if (!XGetWindowAttributes(dpy, ev->window, &wa) || wa.override_redirect)
 		return;
 	if (!wintoclient(ev->window))
