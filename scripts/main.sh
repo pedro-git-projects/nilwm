@@ -2,31 +2,42 @@
 set -Eeuo pipefail
 IFS=$'\n\t'
 
-# ensure to kill the whole process group on exit (so dwm autostart cleanup works)
-trap 'trap - EXIT; kill -- -$$ 2>/dev/null || true' TERM INT EXIT
-
 SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 
-# shellcheck source=./config.sh
-source "$SCRIPT_DIR/config.sh"
-# shellcheck source=./lib/log.sh
-source "$SCRIPT_DIR/lib/log.sh"
-# shellcheck source=./lib/run_once.sh
-source "$SCRIPT_DIR/lib/run_once.sh"
-# shellcheck source=./lib/x11.sh
-source "$SCRIPT_DIR/lib/x11.sh"
+echo $SCRIPT_DIR
+
+source_first() {
+  for p in "$@"; do
+    if [[ -f "$p" ]]; then
+      source "$p"
+      echo $p
+      return 0
+    fi
+  done
+  echo "fatal: none of these files exist: $*" >&2
+  exit 1
+}
+
+# startup config + logging
+source_first \
+  "$SCRIPT_DIR/startup/config.sh" \
+  "$SCRIPT_DIR/config.sh"
+
+source_first \
+  "$SCRIPT_DIR/startup/log.sh" \
+  "$SCRIPT_DIR/lib/log.sh"
+
+# libs
+source_first "$SCRIPT_DIR/lib/run_once.sh"
+source_first "$SCRIPT_DIR/lib/x11.sh"
 
 # modules
-# shellcheck source=./modules/monitors.sh
-source "$SCRIPT_DIR/modules/monitors.sh"
-# shellcheck source=./modules/compositor.sh
-source "$SCRIPT_DIR/modules/compositor.sh"
-# shellcheck source=./modules/wallpapers.sh
-source "$SCRIPT_DIR/modules/wallpapers.sh"
-# shellcheck source=./modules/services.sh
-source "$SCRIPT_DIR/modules/services.sh"
+source_first "$SCRIPT_DIR/modules/monitors.sh"
+source_first "$SCRIPT_DIR/modules/compositor.sh"
+source_first "$SCRIPT_DIR/modules/wallpaper.sh"
+source_first "$SCRIPT_DIR/modules/services.sh"
 
-require_bins xrandr pgrep feh
+require_bins xrandr pgrep feh picom
 
 log_info "dwm startup: begin"
 
@@ -37,4 +48,4 @@ start_daemons
 set_wallpapers "${WALLPAPERS[@]}"
 
 log_info "dwm startup: done"
-trap - TERM INT EXIT
+
