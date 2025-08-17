@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-exec bash "$HOME/.dwm/main.sh"
+exec bash "$HOME/.dwm/scripts/main.sh"
 
