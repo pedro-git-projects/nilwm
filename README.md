@@ -24,6 +24,7 @@ This project integrates a curated set of patches, personalized keybindings, and 
   * `viewontag` – Switch view when tagging windows.
   * `warp` – Moves the cursor to the center of the currently focused window when focus shifts.
   * `fixborders` – Corrects border alpha behavior with picom.
+  * `pertag` – Makes it so each master tag remembers layout data.
 
 * **Custom keybindings & scripts**
 
